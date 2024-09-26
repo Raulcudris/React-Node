@@ -1,22 +1,23 @@
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Chat from "../../components/chat/Chat";
 import List from "../../components/list/List";
+import { AuthContext } from "../../context/AuthContext";
 import apiRequest from "../../lib/apiRequest";
 import "./profilePage.scss";
 
-function ProfilePage() {
+function ProfilePage() {  
+  const { updateUser , currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogout = async () =>{
     try {
       const res = apiRequest.post("/auth/logout");
-      localStorage.removeItem("user");
-      //https://youtu.be/eJ3YysWaP_A?t=4618
+      updateUser(null)
       navigate("/")
     } catch (error) {
       console.log(error)
     }
   }
-
 
   return (
     <div className="profilePage">
@@ -24,21 +25,23 @@ function ProfilePage() {
         <div className="wrapper">
           <div className="title">
             <h1>User Information</h1>
+            <Link to="/profile/update">
             <button>Update Profile</button>
+            </Link>
           </div>
           <div className="info">
             <span>
               Avatar:
               <img
-                src="https://images.pexels.com/photos/91227/pexels-photo-91227.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                alt=""
+              src={ currentUser.avatar || "/noavatar.avif"}
+              alt=""
               />
             </span>
             <span>
-              Username: <b>John Doe</b>
+              Username: <b>{ currentUser.username }</b>
             </span>
             <span>
-              E-mail: <b>john@gmail.com</b>
+              E-mail: <b>{ currentUser.email }</b>
             </span>
             <button onClick={handleLogout}>Logout</button>
           </div>
