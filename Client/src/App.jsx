@@ -2,10 +2,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loader.js";
 import HomePage from "./routes/homePage/homePage";
 import { Layout, RequiereAuth } from "./routes/layout/layout";
 import ListPage from "./routes/listPage/listPage";
 import Login from "./routes/login/login";
+import NewPostPage from "./routes/newPostPage/newPostPage";
 import ProfilePage from "./routes/profilePage/profilePage";
 import ProfileUpdatePage from "./routes/profileUpdatePage/profileUpdatePage";
 import Register from "./routes/register/register";
@@ -23,11 +25,13 @@ function App() {
         },
         {
           path:"/list",
-          element:<ListPage/>
+          element: <ListPage />,
+          loader: listPageLoader,
         },
         {
           path:"/:id",
-          element:<SinglePage/>
+          element:<SinglePage/>,
+          loader: singlePageLoader
         },
         {
           path:"/login",
@@ -40,19 +44,24 @@ function App() {
       ]      
     },
     {
-      path:"/",
-      element:<RequiereAuth />,
-      children:[
+      path: "/",
+      element: <RequiereAuth />,
+      children: [
         {
-          path:"/profile",
-          element:<ProfilePage/>,
+          path: "/profile",
+          element: <ProfilePage />,
+          loader: profilePageLoader
         },
         {
-          path:"/profile/update",
-          element:<ProfileUpdatePage/>,
+          path: "/profile/update",
+          element: <ProfileUpdatePage />,
         },
-      ]
-    }
+        {
+          path: "/add",
+          element: <NewPostPage />,
+        },
+      ],
+    },
   ]);
 
   return (
