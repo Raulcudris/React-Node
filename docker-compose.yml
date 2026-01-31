@@ -3,7 +3,7 @@ version: "3.8"
 services:
   api:
     build:
-      context: ./api
+      context: ./Api
       dockerfile: Dockerfile
     container_name: app-api
     environment:
@@ -35,7 +35,7 @@ services:
 
   web:
     build:
-      context: ./web
+      context: ./Client
       dockerfile: Dockerfile
     container_name: app-web
     depends_on:
