@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: app-api
+    environment:
+      - NODE_ENV=production
+      - PORT=8800
+      - CLIENT_URL=${CLIENT_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - DATABASE_URL=${DATABASE_URL}
+    expose:
+      - "8800"
+    restart: unless-stopped
+    networks:
+      - app-net
+
+  socket:
+    build:
+      context: ./socket
+      dockerfile: Dockerfile
+    container_name: app-socket
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - CLIENT_ORIGIN=${CLIENT_URL}
+    expose:
+      - "4000"
+    restart: unless-stopped
+    networks:
+      - app-net
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: app-web
+    depends_on:
+      - api
+      - socket
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
