@@ -6,12 +6,8 @@ services:
       context: ./Api
       dockerfile: Dockerfile
     container_name: app-api
-    environment:
-      - NODE_ENV=production
-      - PORT=8800
-      - CLIENT_URL=${CLIENT_URL}
-      - JWT_SECRET=${JWT_SECRET}
-      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - ./Api/.env.prod
     expose:
       - "8800"
     restart: unless-stopped
@@ -23,10 +19,8 @@ services:
       context: ./socket
       dockerfile: Dockerfile
     container_name: app-socket
-    environment:
-      - NODE_ENV=production
-      - PORT=4000
-      - CLIENT_ORIGIN=${CLIENT_URL}
+    env_file:
+      - ./socket/.env.prod
     expose:
       - "4000"
     restart: unless-stopped
